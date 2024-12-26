@@ -37,11 +37,15 @@ jobs:
           RELEASE_TAG: academic-calendar-${{ env.YEAR }}
           JA_FILE: data/academic-calendar-${{ env.YEAR }}-ja.ics
           EN_FILE: data/academic-calendar-${{ env.YEAR }}-en.ics
+          JA_JSON: data/${{ env.YEAR }}-ja.json
+          EN_JSON: data/${{ env.YEAR }}-en.json
         uses: softprops/action-gh-release@v2
         with:
           files: |
             ${{ env.JA_FILE }}
             ${{ env.EN_FILE }}
+            ${{ env.JA_JSON }}
+            ${{ env.EN_JSON }}
           tag_name: ${{ env.RELEASE_TAG }}
           name: ${{ env.RELEASE_TAG }}
           draft: false
