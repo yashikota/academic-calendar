@@ -43,5 +43,5 @@ def generate_ics_files(event, lang: str, year: int, url: str):
     os.makedirs("data", exist_ok=True)
 
     cal = _create_calendar(event, lang, url)
-    with open(f"data/academic-calendar-{year}-{lang}.ics", "wb") as f:
+    with open(f"data/{year}-{lang}.ics", "wb") as f:
         f.write(cal.to_ical())
