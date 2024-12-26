@@ -6,7 +6,7 @@ from datetime import datetime
 from icalendar import Calendar, Event
 
 
-def create_calendar(events, lang="ja"):
+def _create_calendar(events, lang, url):
     cal = Calendar()
 
     # Set calendar metadata
@@ -28,6 +28,8 @@ def create_calendar(events, lang="ja"):
         event.add("dtstart", start)
         event.add("dtend", end)
         event.add("dtstamp", datetime.now(jst))
+        event.add("url", url)
+        event.add("description", f"{event_data["event"]}\n{url}")
 
         event_id = f"naist-{lang}-{random.randint(1000, 9999)}"
         event.add("uid", event_id)
@@ -37,13 +39,9 @@ def create_calendar(events, lang="ja"):
     return cal
 
 
-def generate_ics_files(calendar_ja, calendar_en, year: int):
+def generate_ics_files(event, lang: str, year: int, url: str):
     os.makedirs("data", exist_ok=True)
 
-    ja_cal = create_calendar(calendar_ja, "ja")
-    with open(f"data/academic-calendar-{year}-ja.ics", "wb") as f:
-        f.write(ja_cal.to_ical())
-
-    en_cal = create_calendar(calendar_en, "en")
-    with open(f"data/academic-calendar-{year}-en.ics", "wb") as f:
-        f.write(en_cal.to_ical())
+    cal = _create_calendar(event, lang, url)
+    with open(f"data/academic-calendar-{year}-{lang}.ics", "wb") as f:
+        f.write(cal.to_ical())

@@ -2,11 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 
 from date import parse_date
-from util import normalize
+from ics import generate_ics_files
+from util import normalize, output_json
 
 
 class AcademicCalendarJA:
     def __init__(self, year: int = None):
+        self.lang = "ja"
         self.year = year
         self.events = list()
         self.url = "https://www.naist.jp/campuslife/information/calendar.html"
@@ -53,4 +55,5 @@ class AcademicCalendarJA:
                     self.current_events.append(normalize(event))
 
         self._process_events()
-        return self.events
+        output_json(self.events, f"data/{self.year}-{self.lang}.json")
+        generate_ics_files(self.events, self.lang, self.year, self.url)
