@@ -5,9 +5,6 @@ from ja import AcademicCalendarJA
 
 
 def main(year: int):
-    if year is None:
-        raise ValueError("Year is required")
-
     AcademicCalendarJA(year).get()
     AcademicCalendarEN(year).get()
 
@@ -15,6 +12,10 @@ def main(year: int):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-y", "--year", type=int, help="The year of the academic calendar"
+        "-y",
+        "--year",
+        type=int,
+        help="The year of the academic calendar",
+        required=True,
     )
     main(parser.parse_args().year)
