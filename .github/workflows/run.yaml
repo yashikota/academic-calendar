@@ -1,0 +1,48 @@
+name: "Generate Academic Calendar ics file"
+
+on:
+#   schedule:
+#     - cron: "0 15 31 3 *" # 4/1 00:00(JST)
+  workflow_dispatch:
+    inputs:
+      year:
+        description: 'Year'
+        required: true
+        type: number
+
+jobs:
+  job:
+    name: run
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set year
+        id: set-year
+        run: echo "YEAR=${{ github.event.inputs.year }}" >> $GITHUB_ENV
+
+      - name: Run
+        run: YEAR=${{ env.YEAR }} docker compose up
+
+      - name: Create Release and Upload Assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: academic-calendar-${{ env.YEAR }}
+          JA_FILE: data/academic-calendar-${{ env.YEAR }}-ja.ics
+          EN_FILE: data/academic-calendar-${{ env.YEAR }}-en.ics
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.JA_FILE }}
+            ${{ env.EN_FILE }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_TAG }}
+          draft: false
+          prerelease: false
