@@ -35,8 +35,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: academic-calendar-${{ env.YEAR }}
-          JA_FILE: data/academic-calendar-${{ env.YEAR }}-ja.ics
-          EN_FILE: data/academic-calendar-${{ env.YEAR }}-en.ics
+          JA_FILE: data/${{ env.YEAR }}-ja.ics
+          EN_FILE: data/${{ env.YEAR }}-en.ics
           JA_JSON: data/${{ env.YEAR }}-ja.json
           EN_JSON: data/${{ env.YEAR }}-en.json
         uses: softprops/action-gh-release@v2
