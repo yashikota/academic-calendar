@@ -6,14 +6,14 @@ from datetime import datetime
 from icalendar import Calendar, Event
 
 
-def _create_calendar(events, lang, url):
+def _create_calendar(events, year, lang, url):
     cal = Calendar()
 
     # Set calendar metadata
     cal.add("prodid", f"-//NAIST Academic Calendar {lang.upper()}//EN")
     cal.add("version", "2.0")
     cal.add("calscale", "GREGORIAN")
-    cal.add("x-wr-calname", f"NAIST Academic Calendar {lang.upper()}")
+    cal.add("x-wr-calname", f"NAIST Academic Calendar {str(year)} {lang.upper()}")
     cal.add("x-wr-timezone", "Asia/Tokyo")
 
     jst = zoneinfo.ZoneInfo("Asia/Tokyo")
@@ -42,6 +42,6 @@ def _create_calendar(events, lang, url):
 def generate_ics_files(event, lang: str, year: int, url: str):
     os.makedirs("data", exist_ok=True)
 
-    cal = _create_calendar(event, lang, url)
+    cal = _create_calendar(event, year, lang, url)
     with open(f"data/{year}-{lang}.ics", "wb") as f:
         f.write(cal.to_ical())
